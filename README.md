@@ -1,533 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GitBase - Turn GitHub Into a Database</title>
+<div align="center" style="background: linear-gradient(135deg, #f0fdf4, #e8f5e9); padding: 100px 20px; border-bottom: 3px solid #2ea043; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; border-radius: 24px; margin-bottom: 40px; box-shadow: inset 0 0 40px rgba(46,160,67,0.05);">
+  
+<img src="./logo.png" alt="Gitbase Logo" width="180" height="180" style="border-radius: 44px; box-shadow: 0 20px 40px rgba(46,160,67,0.3);">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <h1 style="font-size: 5.5rem; font-weight: 900; margin-bottom: 15px; color: #166534; border-bottom: none; padding-bottom: 0; line-height: 1; letter-spacing: -2px;">
+    GitBase
+  </h1>
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
-
-body{
-background:#f6f8fa;
-color:#24292f;
-line-height:1.7;
-overflow-x: hidden;
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulseShadow {
-  0% { box-shadow: 0 0 30px rgba(46,160,67,.2); }
-  50% { box-shadow: 0 0 50px rgba(46,160,67,.4); }
-  100% { box-shadow: 0 0 30px rgba(46,160,67,.2); }
-}
-
-.hero{
-padding:80px 20px;
-text-align:center;
-background:linear-gradient(135deg,#ffffff,#f6f8fa);
-border-bottom:1px solid #d0d7de;
-animation: fadeInUp 0.8s ease-out;
-}
-
-.logo{
-width:140px;
-height:140px;
-margin:auto;
-border-radius:30px;
-background:linear-gradient(135deg,#2ea043,#238636);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:70px;
-margin-bottom:25px;
-animation: pulseShadow 3s infinite ease-in-out, fadeInUp 0.6s ease-out;
-}
-
-.hero h1{
-font-size:4rem;
-font-weight:800;
-margin-bottom:10px;
-color:#24292f;
-}
-
-.hero p{
-font-size:1.2rem;
-color:#57606a;
-max-width:900px;
-margin:auto;
-}
-
-.badges{
-margin-top:25px;
-display:flex;
-justify-content:center;
-gap:15px;
-flex-wrap:wrap;
-}
-
-.badge{
-background:#ffffff;
-padding:12px 20px;
-border-radius:50px;
-border:1px solid #d0d7de;
-color:#24292f;
-font-weight: 500;
-transition: all 0.3s ease;
-}
-
-.badge:hover {
-transform: scale(1.05);
-background: #f0f3f6;
-}
-
-.container{
-max-width:1300px;
-margin:auto;
-padding:60px 20px;
-animation: fadeInUp 1s ease-out;
-}
-
-.section-title{
-font-size:2.4rem;
-margin-bottom:25px;
-font-weight:700;
-color:#24292f;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-margin-top:30px;
-}
-
-.card{
-background:#ffffff;
-padding:30px;
-border-radius:20px;
-border:1px solid #d0d7de;
-transition: all .3s cubic-bezier(0.25, 0.8, 0.25, 1);
-box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-}
-
-.card:hover{
-transform:translateY(-8px);
-border-color:#2ea043;
-box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-}
-
-.card h3{
-font-size:1.3rem;
-margin-bottom:15px;
-color:#24292f;
-}
-
-.card-icon{
-font-size:50px;
-margin-bottom:15px;
-transition: transform 0.3s ease;
-}
-
-.card:hover .card-icon {
-transform: scale(1.1);
-}
-
-.info-box{
-background:#ffffff;
-padding:30px;
-border-radius:20px;
-margin-top:25px;
-border:1px solid #d0d7de;
-box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-}
-
-/* --- REPO-AS-A-DATABASE SETUP & CRUD UI STYLING --- */
-.setup-banner {
-background: #f1f8ff;
-border: 1px dashed #0366d6;
-padding: 20px;
-border-radius: 12px;
-margin-bottom: 25px;
-}
-.setup-banner h3 {
-color: #0366d6;
-margin-bottom: 10px;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-.setup-code-preview {
-background: #24292e;
-color: #e1e4e8;
-padding: 10px 15px;
-border-radius: 6px;
-font-family: monospace;
-font-size: 0.85rem;
-margin: 8px 0;
-}
-
-.crud-grid {
-display: grid;
-grid-template-columns: 1fr 2fr;
-gap: 30px;
-margin-top: 20px;
-}
-@media(max-width: 900px) {
-  .crud-grid { grid-template-columns: 1fr; }
-}
-
-.form-group {
-margin-bottom: 15px;
-}
-.form-group label {
-display: block;
-font-weight: 600;
-margin-bottom: 5px;
-font-size: 0.9rem;
-}
-.form-group input {
-width: 100%;
-padding: 10px 15px;
-border: 1px solid #d0d7de;
-border-radius: 8px;
-font-size: 0.95rem;
-background: #fafafa;
-}
-.form-group input:focus {
-outline: none;
-border-color: #2ea043;
-background: #fff;
-}
-.btn {
-background: #2ea043;
-color: white;
-padding: 10px 20px;
-border: none;
-border-radius: 8px;
-cursor: pointer;
-font-weight: 600;
-transition: background 0.2s;
-display: inline-block;
-}
-.btn:hover { background: #238636; }
-.btn-danger { background: #cf222e; }
-.btn-danger:hover { background: #a40e18; }
-.btn-secondary { background: #57606a; }
-.btn-secondary:hover { background: #24292f; }
-
-.status-log {
-margin-top: 15px;
-padding: 10px;
-border-radius: 6px;
-font-size: 0.85rem;
-background: #f0f3f6;
-border-left: 4px solid #57606a;
-}
-
-.code{
-background:#1f2428;
-padding:20px;
-border-radius:15px;
-overflow:auto;
-margin-top:20px;
-font-family:monospace;
-white-space:pre-wrap;
-color:#e1e4e8;
-border:1px solid #24292f;
-box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.flow{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:15px;
-flex-wrap:wrap;
-margin-top:25px;
-}
-
-.flow div:not(.arrow){
-background:#ffffff;
-padding:15px 20px;
-border-radius:12px;
-border:1px solid #d0d7de;
-font-weight: 500;
-transition: all 0.3s ease;
-}
-
-.flow div:not(.arrow):hover {
-background: #f0f3f6;
-transform: translateY(-3px);
-}
-
-.arrow{
-font-size:24px;
-color: #2ea043;
-animation: walkRight 1.5s infinite ease-in-out;
-}
-
-@keyframes walkRight {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:25px;
-background: #ffffff;
-border-radius: 12px;
-overflow: hidden;
-box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-border: 1px solid #d0d7de;
-}
-
-th{
-background:#2ea043;
-color: white;
-padding:15px;
-font-weight: 600;
-text-align: left;
-}
-
-td{
-padding:15px;
-border:1px solid #d0d7de;
-}
-
-tr:nth-child(even) {
-background: #f6f8fa;
-}
-
-.action-btns {
-display: flex;
-gap: 8px;
-}
-
-.footer{
-text-align:center;
-padding:60px 20px;
-margin-top:60px;
-border-top:1px solid #d0d7de;
-background: #ffffff;
-color:#57606a;
-}
-
-.highlight{
-color:#2ea043;
-font-weight:700;
-background: #dafbe1;
-padding: 2px 6px;
-border-radius: 4px;
-}
-
-ul{
-padding-left:25px;
-margin-top:15px;
-}
-
-li{
-margin-bottom:10px;
-}
-
-@media(max-width:768px){
-.hero h1{ font-size:2.5rem; }
-.section-title{ font-size:2rem; }
-}
-</style>
-</head>
-<body>
-
-<section class="hero">
-
-<div class="logo">🗄️</div>
-
-<h1>GitBase</h1>
-
-<p>
-Turn Any GitHub Repository Into a Lightweight Database.
-A professional demonstration project showing how GitHub repositories can store,
-manage, and version application data without requiring a traditional database server.
-</p>
-
-<div class="badges">
-<div class="badge">⚡ GitHub Database</div>
-<div class="badge">📦 JSON Storage</div>
-<div class="badge">🚀 Open Source</div>
-<div class="badge">🔄 Version Controlled</div>
-</div>
-
-</section>
-
-<div class="container">
-
-<h2 class="section-title">⚙️ Build Your Own GitHub Database</h2>
-<div class="info-box" style="border: 2px solid #0366d6;">
-  <p style="font-size: 1.1rem; margin-bottom: 20px;">
-    You can easily configure your own GitHub repository to act as a private or public database cluster using the companion web utility provided in this repository!
+  <p style="font-size: 1.35rem; color: #374151; max-width: 850px; margin: 0 auto 35px auto; line-height: 1.7; font-weight: 500;">
+    Turn Any GitHub Repository Into a Lightweight Database. <br>
+    A professional demonstration project showing how GitHub repositories can store, manage, and version application data without requiring a traditional database server.
   </p>
 
-<div class="setup-banner">
-  <h3>📂 Step 1: Add Three Required Files to Your Target Repository</h3>
-  <p>Initialize your personal database system by adding three raw configuration tracking files to the root directory of your repository:</p>
-  
-  <p style="margin-top: 15px;"><strong>1. <code>users.json</code></strong> (Maintains user collections data)</p>
-  <p style="font-size:0.9rem; color:#57606a;">Create this file initialized with an empty array schema:</p>
-  <div class="setup-code-preview">[]</div>
+  <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+    <span style="background: #ffffff; padding: 10px 22px; border-radius: 50px; border: 1px solid #bbf7d0; color: #166534; font-weight: 700; font-size: 0.95rem; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">⚡ GitHub Database</span>
+    <span style="background: #ffffff; padding: 10px 22px; border-radius: 50px; border: 1px solid #bbf7d0; color: #166534; font-weight: 700; font-size: 0.95rem; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">📦 JSON Storage</span>
+    <span style="background: #ffffff; padding: 10px 22px; border-radius: 50px; border: 1px solid #bbf7d0; color: #166534; font-weight: 700; font-size: 0.95rem; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">🚀 Open Source</span>
+    <span style="background: #ffffff; padding: 10px 22px; border-radius: 50px; border: 1px solid #bbf7d0; color: #166534; font-weight: 700; font-size: 0.95rem; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">🔄 Version Controlled</span>
+  </div>
 
-  <p style="margin-top: 15px;"><strong>2. <code>records.json</code></strong> (Holds structural dynamic data entries)</p>
-  <p style="font-size:0.9rem; color:#57606a;">Create this file to track core records matrices:</p>
-  <div class="setup-code-preview">[]</div>
-  
-  <p style="margin-top: 15px;"><strong>3. <code>logs.json</code></strong> (Tracks continuous automated transactional changes)</p>
-  <p style="font-size:0.9rem; color:#57606a;">Create this history sheet file to map CRUD commits logs:</p>
-  <div class="setup-code-preview">[]</div>
 </div>
+<br>
 
-  <div class="setup-banner" style="background: #dafbe1; border-color: #2ea043;">
-    <h3 style="color: #238636;">🖥️ Step 2: Access the Management App File</h3>
-    <p>I have uploaded a functional standalone <strong>database dashboard web page</strong> directly inside this project repository.</p>
-    <ul style="margin-top: 10px; padding-left: 20px;">
-      <li>Download or open the provided web page interface utility locally in any browser.</li>
-      <li>Securely input your personal target **GitHub Access Credentials** (Username, Target Repo Name, and a Personal Access Token with <code>repo</code> permissions) directly into the page's dashboard panel fields.</li>
-      <li>The interface executes full operational <strong>CRUD features (Create, Read, Update, Delete)</strong> directly over your repository data arrays using asynchronous API transactions!</li>
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">⚙️ Build Your Own GitHub Database</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; margin-top: 25px; border: 2px solid #0366d6; box-shadow: 0 2px 5px rgba(0,0,0,0.02); font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+  <p style="font-size: 1.1rem; margin-bottom: 20px; color: #24292f;">You can easily configure your own GitHub repository to act as a private or public database cluster using the companion web utility provided in this repository!</p>
+  <div style="background: #f1f8ff; border: 1px dashed #0366d6; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+    <h3 style="color: #0366d6; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-size: 1.3rem; margin-top: 0;">📂 Step 1: Add Three Required Files to Your Target Repository</h3>
+    <p style="color: #24292f; margin-bottom: 15px;">Initialize your personal database system by adding three raw configuration tracking files to the root directory of your repository:</p>
+    <p style="margin-top: 15px; margin-bottom: 5px;"><strong>1. <code>users.json</code></strong> (Maintains user collections data)</p>
+    <p style="font-size: 0.9rem; color: #57606a; margin-bottom: 5px;">Create this file initialized with an empty array schema:</p>
+    <pre style="background: #24292e; color: #e1e4e8; padding: 12px 15px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin: 8px 0;"><code>[]</code></pre>
+    <p style="margin-top: 15px; margin-bottom: 5px;"><strong>2. <code>records.json</code></strong> (Holds structural dynamic data entries)</p>
+    <p style="font-size: 0.9rem; color: #57606a; margin-bottom: 5px;">Create this file to track core records matrices:</p>
+    <pre style="background: #24292e; color: #e1e4e8; padding: 12px 15px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin: 8px 0;"><code>[]</code></pre>
+    <p style="margin-top: 15px; margin-bottom: 5px;"><strong>3. <code>logs.json</code></strong> (Tracks continuous automated transactional changes)</p>
+    <p style="font-size: 0.9rem; color: #57606a; margin-bottom: 5px;">Create this history sheet file to map CRUD commits logs:</p>
+    <pre style="background: #24292e; color: #e1e4e8; padding: 12px 15px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; margin: 8px 0;"><code>[]</code></pre>
+  </div>
+  <div style="background: #dafbe1; border: 1px dashed #2ea043; padding: 20px; border-radius: 12px;">
+    <h3 style="color: #238636; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-size: 1.3rem; margin-top: 0;">🖥️ Step 2: Access the Management App File</h3>
+    <p style="color: #24292f;">I have uploaded a functional standalone <strong>database dashboard web page</strong> directly inside this project repository.</p>
+    <ul style="margin-top: 10px; padding-left: 20px; color: #24292f; margin-bottom: 0;">
+      <li style="margin-bottom: 10px;">Download or open the provided web page interface utility locally in any browser.</li>
+      <li style="margin-bottom: 10px;">Securely input your personal target <strong>GitHub Access Credentials</strong> (Username, Target Repo Name, and a Personal Access Token with <code>repo</code> permissions) directly into the page's dashboard panel fields.</li>
+      <li style="margin-bottom: 0;">The interface executes full operational <strong>CRUD features (Create, Read, Update, Delete)</strong> directly over your repository data arrays using asynchronous API transactions!</li>
     </ul>
   </div>
 </div>
 
-<div class="container" style="padding: 0;">
-<h2 class="section-title" style="margin-top:70px;">📦 Use Cases</h2>
+<br>
 
-<div class="cards">
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">📦 Use Cases</h2>
 
-<div class="card">
-<div class="card-icon">🌐</div>
-<h3>Portfolio Websites</h3>
-<p>
-Store projects, achievements, certificates, skills, blogs, and personal profile information.
-</p>
-</div>
+<table>
+  <tr>
+    <td width="50%" valign="top" style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de;">
+      <div style="font-size: 50px; margin-bottom: 15px;">🌐</div>
+      <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #24292f; font-weight: 700;">Portfolio Websites</h3>
+      <p style="color: #57606a; font-size: 0.95rem; margin: 0;">Store projects, achievements, certificates, skills, blogs, and personal profile information.</p>
+    </td>
+    <td width="50%" valign="top" style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de;">
+      <div style="font-size: 50px; margin-bottom: 15px;">🤖</div>
+      <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #24292f; font-weight: 700;">Bots & Automation</h3>
+      <p style="color: #57606a; font-size: 0.95rem; margin: 0;">Save bot settings, user preferences, logs, command configurations, and reports.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top" style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de;">
+      <div style="font-size: 50px; margin-bottom: 15px;">📊</div>
+      <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #24292f; font-weight: 700;">Dashboards</h3>
+      <p style="color: #57606a; font-size: 0.95rem; margin: 0;">Maintain datasets and statistics without purchasing database hosting.</p>
+    </td>
+    <td width="50%" valign="top" style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de;">
+      <div style="font-size: 50px; margin-bottom: 15px;">🧪</div>
+      <h3 style="font-size: 1.3rem; margin-bottom: 15px; color: #24292f; font-weight: 700;">Prototypes</h3>
+      <p style="color: #57606a; font-size: 0.95rem; margin: 0;">Rapidly build MVPs and proof-of-concepts using GitHub as a backend.</p>
+    </td>
+  </tr>
+</table>
 
-<div class="card">
-<div class="card-icon">🤖</div>
-<h3>Bots & Automation</h3>
-<p>
-Save bot settings, user preferences, logs, command configurations, and reports.
-</p>
-</div>
+<br>
 
-<div class="card">
-<div class="card-icon">📊</div>
-<h3>Dashboards</h3>
-<p>
-Maintain datasets and statistics without purchasing database hosting.
-</p>
-</div>
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">🤔 Why Use GitHub As A Database?</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+  <p style="color: #24292f; margin-bottom: 15px;">Traditional databases are powerful, but for many small projects they are unnecessary. GitHub already provides several core features needed for data storage:</p>
+  <ul style="padding-left: 25px; margin-top: 15px; color: #24292f;">
+    <li style="margin-bottom: 10px;">✅ Cloud Storage</li>
+    <li style="margin-bottom: 10px;">✅ Global Accessibility</li>
+    <li style="margin-bottom: 10px;">✅ GitHub API Access</li>
+    <li style="margin-bottom: 10px;">✅ Built-in Backups</li>
+    <li style="margin-bottom: 10px;">✅ Version History</li>
+    <li style="margin-bottom: 10px;">✅ Collaboration Features</li>
+    <li style="margin-bottom: 10px;">✅ Free Hosting</li>
+  </ul>
 
-<div class="card">
-<div class="card-icon">🧪</div>
-<h3>Prototypes</h3>
-<p>
-Rapidly build MVPs and proof-of-concepts using GitHub as a backend.
-</p>
-</div>
-
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">🤔 Why Use GitHub As A Database?</h2>
-
-<div class="info-box">
-
-<p>
-Traditional databases are powerful, but for many small projects they are unnecessary.
-GitHub already provides several core features needed for data storage:
-</p>
-
-<ul>
-<li>✅ Cloud Storage</li>
-<li>✅ Global Accessibility</li>
-<li>✅ GitHub API Access</li>
-<li>✅ Built-in Backups</li>
-<li>✅ Version History</li>
-<li>✅ Collaboration Features</li>
-<li>✅ Free Hosting</li>
-</ul>
-
-<div class="code">
+```json
 {
   "id": 1,
   "name": "Jai",
   "role": "Developer"
 }
+```
+
+  <p style="margin-top: 20px; color: #24292f;">
+    The above JSON can be stored inside a repository file such as:
+    <span style="color: #2ea043; font-weight: 700; background: #dafbe1; padding: 2px 6px; border-radius: 4px;">data/users.json</span>
+    and accessed anywhere in the world.
+  </p>
 </div>
 
-<p style="margin-top:20px;">
-The above JSON can be stored inside a repository file such as:
-<span class="highlight">data/users.json</span>
-and accessed anywhere in the world.
-</p>
+<br>
 
-</div>
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">🏗️ How GitBase Works</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de;">
+  <p style="color: #24292f; margin-bottom: 15px;">GitBase treats files as database tables or collections.</p>
 
-<h2 class="section-title" style="margin-top:70px;">🏗️ How GitBase Works</h2>
-
-<div class="info-box">
-
-<p>
-GitBase treats files as database tables or collections.
-</p>
-
-<div class="code">
+```text
 GitHub Repository
-
 ├── users.json
 ├── products.json
 ├── notes.json
 └── logs.json
-</div>
+```
 
-<p style="margin-top:20px;">
-Each file acts as a collection:
-</p>
+  <p style="margin-top: 20px; color: #24292f;">Each file acts as a collection:</p>
 
-<div class="code">
+```text
 users.json     → Users Collection
 products.json  → Products Collection
 notes.json     → Notes Collection
 logs.json      → Logs Collection
+```
 </div>
 
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">🔄 Data Flow</h2>
+<div align="center" style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 25px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+  <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f; display: inline-block; margin: 5px;">📖 Read File</span>
+  <span style="font-size: 24px; color: #2ea043; margin: 5px;">➡️</span>
+  <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f; display: inline-block; margin: 5px;">✏️ Modify Data</span>
+  <span style="font-size: 24px; color: #2ea043; margin: 5px;">➡️</span>
+  <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f; display: inline-block; margin: 5px;">💾 Commit Changes</span>
+  <span style="font-size: 24px; color: #2ea043; margin: 5px;">➡️</span>
+  <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f; display: inline-block; margin: 5px;">🚀 Push To GitHub</span>
+  <span style="font-size: 24px; color: #2ea043; margin: 5px;">➡️</span>
+  <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f; display: inline-block; margin: 5px;">✅ Updated Database</span>
 </div>
 
-<h2 class="section-title" style="margin-top:70px;">🔄 Data Flow</h2>
+<br>
 
-<div class="flow">
-<div>📖 Read File</div>
-<div class="arrow">➡️</div>
-<div>✏️ Modify Data</div>
-<div class="arrow">➡️</div>
-<div>💾 Commit Changes</div>
-<div class="arrow">➡️</div>
-<div>🚀 Push To GitHub</div>
-<div class="arrow">➡️</div>
-<div>✅ Updated Database</div>
-</div>
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">📂 Repository Structure</h2>
 
-<h2 class="section-title" style="margin-top:70px;">📂 Repository Structure</h2>
-
-<div class="code">
+```text
 gitBase/
 ├── users.json          → Users Collection (Initialized as [])
 ├── records.json        → Dynamic Records Entries (Initialized as [])
@@ -548,220 +173,152 @@ gitBase/
 │
 ├── README.md
 └── LICENSE
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">🔍 Reading Data</h2>
-
-<div class="info-box">
-
-<p>Example JavaScript:</p>
-
-<div class="code">
-fetch(
-'https://raw.githubusercontent.com/username/gitBase/main/data/users.json'
-)
-.then(response => response.json())
-.then(data => console.log(data));
-</div>
-
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">✍️ Writing Data</h2>
-
-<div class="info-box">
-
-<p>
-Writing data is performed using the GitHub REST API.
-</p>
-
-<div class="flow">
-<div>📖 Read</div>
-<div class="arrow">➡️</div>
-<div>✏️ Edit</div>
-<div class="arrow">➡️</div>
-<div>📦 Commit</div>
-<div class="arrow">➡️</div>
-<div>🚀 Push</div>
-</div>
-
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">🛠️ CRUD Operations</h2>
-
-<table>
-
-<tr>
-<th>Operation</th>
-<th>GitBase Method</th>
-</tr>
-
-<tr>
-<td>Create</td>
-<td>Add JSON Record</td>
-</tr>
-
-<tr>
-<td>Read</td>
-<td>Fetch JSON File</td>
-</tr>
-
-<tr>
-<td>Update</td>
-<td>Edit Record + Commit</td>
-</tr>
-
-<tr>
-<td>Delete</td>
-<td>Remove Record + Commit</td>
-</tr>
-
-</table>
-
-<h2 class="section-title" style="margin-top:70px;">📜 Version History</h2>
-
-<div class="info-box">
-
-<p>
-Every database update automatically becomes a Git commit.
-</p>
-
-<div class="code">
-Commit #1 → Initial Database
-
-Commit #2 → Added User
-
-Commit #3 → Updated Profile
-
-Commit #4 → Removed Record
-
-Commit #5 → Added New Feature
-</div>
-
-<p style="margin-top:20px;">
-Unlike many databases, every previous state can be restored.
-</p>
-
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">⚡ Advantages</h2>
-
-<div class="cards">
-
-<div class="card">
-<h3>💸 Free</h3>
-<p>No database hosting required.</p>
-</div>
-
-<div class="card">
-<h3>📜 Version Control</h3>
-<p>Every modification is tracked.</p>
-</div>
-
-<div class="card">
-<h3>🔒 Backup History</h3>
-<p>Rollback any change instantly.</p>
-</div>
-
-<div class="card">
-<h3>🌍 Global Access</h3>
-<p>Access data from anywhere.</p>
-</div>
-
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">⚠️ Limitations</h2>
-
-<div class="info-box">
-
-<ul>
-<li>❌ Not suitable for banking applications</li>
-<li>❌ Not ideal for real-time systems</li>
-<li>❌ Not suitable for thousands of simultaneous writes</li>
-<li>❌ API rate limits apply</li>
-<li>❌ Slower than dedicated databases</li>
-</ul>
-
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">🎯 Best For</h2>
-
-<div class="cards">
-
-<div class="card">🌐 Personal Websites</div>
-<div class="card">📂 Portfolios</div>
-<div class="card">🎓 School Projects</div>
-<div class="card">🧪 Experimental Projects</div>
-<div class="card">🤖 Small Bots</div>
-<div class="card">⚙️ Configuration Storage</div>
-
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">🚀 Quick Start</h2>
-
-<div class="info-box">
-
-<div class="code">
-git clone https://github.com/JaiServanaBhava/gitBase.git
-</div>
-
-<div class="code">
-[
- {
-   "id":1,
-   "name":"Jai",
-   "role":"Developer"
- }
-]
-</div>
-
-<div class="code">
-git add .
-
-git commit -m "Added first user"
-
-git push
-</div>
-
-<p style="margin-top:20px;">
-Your GitHub repository is now functioning as a lightweight database.
-</p>
-
-</div>
-
-<h2 class="section-title" style="margin-top:70px;">🧠 Project Goal</h2>
-
-<div class="info-box">
-
-<p>
-GitBase demonstrates that Git repositories can be used as lightweight databases
-by storing structured data files, leveraging GitHub APIs, and taking advantage of
-Git's powerful version control system.
-</p>
-
-<p style="margin-top:20px;">
-This project is intended for educational purposes and showcases an alternative
-approach to storing application data.
-</p>
-
-</div>
-
-</div>
-
-<footer class="footer">
-
-<h2>⭐ GitBase</h2>
-
-<p>
-Turn Any GitHub Repository Into A Lightweight Database
-</p>
+```
 
 <br>
 
-<p>
-Made with ❤️ Jai Servana Bhava
-</p>
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">🔍 Reading Data</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+  <p style="color: #24292f; font-weight: 600; margin-bottom: 10px;">Example JavaScript Payload Stream Fetch:</p>
 
-</footer>
+```javascript
+fetch('[https://raw.githubusercontent.com/username/gitBase/main/data/users.json](https://raw.githubusercontent.com/username/gitBase/main/data/users.json)')
+  .then(response => response.json())
+  .then(data => console.log(data));
+```
+</div>
 
-</body>
-</html>
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">✍️ Writing Data</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de;">
+  <p style="color: #24292f; margin-bottom: 15px;">Writing data is performed using the GitHub REST API.</p>
+  <div align="center" style="display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+    <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f;">📖 Read</span>
+    <span style="font-size: 24px; color: #2ea043;">➡️</span>
+    <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f;">✏️ Edit</span>
+    <span style="font-size: 24px; color: #2ea043;">➡️</span>
+    <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f;">📦 Commit</span>
+    <span style="font-size: 24px; color: #2ea043;">➡️</span>
+    <span style="background: #ffffff; padding: 15px 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 500; color: #24292f;">🚀 Push</span>
+  </div>
+</div>
+
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">🛠️ CRUD Operations</h2>
+
+| Operation | GitBase Method |
+| :--- | :--- |
+| **Create** | Add JSON Record |
+| **Read** | Fetch JSON File |
+| **Update** | Edit Record + Commit |
+| **Delete** | Remove Record + Commit |
+
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">📜 Version History</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+  <p style="color: #24292f; margin-bottom: 15px;">Every database update automatically becomes a Git commit.</p>
+
+```text
+Commit #1 → Initial Database
+Commit #2 → Added User
+Commit #3 → Updated Profile
+Commit #4 → Removed Record
+Commit #5 → Added New Feature
+```
+
+  <p style="margin-top: 20px; color: #24292f;">Unlike many databases, every previous state can be restored instantly.</p>
+</div>
+
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">⚡ Advantages</h2>
+
+| 💸 Free | 📜 Version Control |
+| :--- | :--- |
+| No database hosting required. | Every modification is tracked transparently. |
+| **🔒 Backup History** | **🌍 Global Access** |
+| Rollback any structural change instantly. | Access production cluster arrays from anywhere. |
+
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">⚠️ Limitations</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de;">
+  <ul style="padding-left: 25px; color: #24292f; margin: 0;">
+    <li style="margin-bottom: 10px;">❌ Not suitable for banking applications</li>
+    <li style="margin-bottom: 10px;">❌ Not ideal for real-time parallel systems</li>
+    <li style="margin-bottom: 10px;">❌ Not suitable for thousands of simultaneous execution writes</li>
+    <li style="margin-bottom: 10px;">❌ API core concurrency rate limits apply</li>
+    <li style="margin-bottom: 0;">❌ Slower response metrics than dedicated instances</li>
+  </ul>
+</div>
+
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">🎯 Best For</h2>
+
+<table>
+  <tr>
+    <td align="center" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 600; color: #24292f;">🌐 Personal Websites</td>
+    <td align="center" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 600; color: #24292f;">📂 Portfolios</td>
+    <td align="center" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 600; color: #24292f;">🎓 School Projects</td>
+  </tr>
+  <tr>
+    <td align="center" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 600; color: #24292f;">🧪 Experimental MVPs</td>
+    <td align="center" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 600; color: #24292f;">🤖 Small Bots</td>
+    <td align="center" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #d0d7de; font-weight: 600; color: #24292f;">⚙️ Config Storage</td>
+  </tr>
+</table>
+
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">🚀 Quick Start</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de; box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+
+```bash
+git clone [https://github.com/yourusername/gitBase.git](https://github.com/yourusername/gitBase.git)
+```
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Jai",
+    "role": "Developer"
+  }
+]
+```
+
+```bash
+git add .
+git commit -m "Added first user"
+git push origin main
+```
+
+  <p style="margin-top: 20px; color: #24292f; font-weight: 500;">
+    Your GitHub repository is now functioning as a lightweight database.
+  </p>
+</div>
+
+<br>
+
+<h2 style="font-size: 2.4rem; margin-top: 50px; margin-bottom: 25px; font-weight: 700; color: #24292f;">🧠 Project Goal</h2>
+<div style="background: #ffffff; padding: 30px; border-radius: 20px; border: 1px solid #d0d7de;">
+  <p style="color: #24292f; line-height: 1.7; margin-bottom: 15px;">
+    GitBase demonstrates that Git repositories can be used as lightweight databases by storing structured data files, leveraging GitHub APIs, and taking advantage of Git's powerful version control system.
+  </p>
+  <p style="color: #24292f; line-height: 1.7; margin: 0;">
+    This project is intended for educational purposes and showcases an alternative approach to storing application data safely without continuous backend cloud server costs.
+  </p>
+</div>
+
+<br>
+
+<div align="center" style="text-align: center; padding: 60px 20px; margin-top: 60px; border-top: 1px solid #d0d7de; background: #ffffff; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+  <h2 style="color: #24292f; font-weight: 700; font-size: 1.8rem; border: none; padding-bottom: 0; margin-bottom: 5px;">⭐ GitBase</h2>
+  <p style="color: #57606a; font-size: 1rem; margin-bottom: 15px;">Turn Any GitHub Repository Into A Lightweight Database</p>
+  <p style="color: #2ea043; font-weight: 700; font-size: 1.1rem; margin-bottom: 10px;">Developed by Jai Servana Bhava</p>
+  <p style="color: #57606a; font-size: 0.85rem; margin: 0;">Made with ❤️ using Git & GitHub Workspace</p>
+</div>
