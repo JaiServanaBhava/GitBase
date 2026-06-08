@@ -158,18 +158,8 @@ gitBase/
 ├── records.json        → Dynamic Records Entries (Initialized as [])
 ├── logs.json           → Transaction History Log (Initialized as [])
 │
-├── data/
-│   ├── products.json
-│   ├── posts.json
-│   └── settings.json
-│
-├── examples/
-│   ├── javascript/
-│   ├── python/
+├── public/
 │   └── html/
-│
-├── docs/
-│   └── architecture.md
 │
 ├── README.md
 └── LICENSE
